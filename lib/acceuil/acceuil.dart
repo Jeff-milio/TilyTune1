@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tilytune1/acceuil/recommandepage/recommandepage.dart';
+import '../AlbumPage/albumpage.dart';
+import '../data.dart';
 import '../free/free.dart';
 import '../musiquePlayerPage/musiqueplayerPage.dart';
 import '../profil/profil.dart';
@@ -18,77 +20,31 @@ class acceuil extends StatefulWidget {
 }
 
 class _acceuilState extends State<acceuil> {
-
   void moveTrackToTop(Map<String, String> track) {
     setState(() {
-      recentTracks.remove(track);   // Supprime de sa position actuelle
+      recentTracks.remove(track); // Supprime de sa position actuelle
       recentTracks.insert(0, track); // Ajoute à la première position
     });
   }
 
   final items = [
     Image.asset('assets/images/charte.g_1.jpg'),
-    Image.asset('assets/images/charte.g_1.jpg'),
-    Image.asset('assets/images/charte.g_1.jpg'),
+    Image.asset('assets/images/odd.tilytune.jpg'),
   ];
   int CurentIndex = 0;
-
-  late final List<Map<String, String>> albums = [
-    {
-      'title': 'RAILOVY',
-      'artist': 'Hira Tily',
-      'cover': 'assets/images/tily.jpg',
-    },
-    {
-      'title': 'Sareba',
-      'artist': 'Skoto',
-      'cover': 'assets/images/guitaretily.jpg',
-    },
-    {
-      'title': 'Medley',
-      'artist': 'Filoha Remi',
-      'cover': 'assets/images/filoha remi.jpg',
-    },
-    {
-      'title': 'Hira Sapaoritra',
-      'artist': 'Tily',
-      'cover': 'assets/images/tily.jpg',
-    },
-  ];
-
-  late  List<Map<String, String>> recentTracks = [
-    {
-      'title': 'Hira Sapaoritra',
-      'artist': 'Tily',
-      'cover': 'assets/images/tily.jpg',
-    },
-    {
-      'title': 'Medley',
-      'artist': 'Filoha Remi',
-      'cover': 'assets/images/filoha remi.jpg'
-    },
-    {
-      'title': 'Sareba',
-      'artist': 'Skoto',
-      'cover': 'assets/images/guitaretily.jpg'
-    },
-    {
-      'title': 'RAILOVY',
-      'artist': 'Hira Tily',
-      'cover': 'assets/images/tily.jpg',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        toolbarHeight: 43,
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF2A0F12), Color(0xFF501C1F), Color(0xF4000000)],
+              colors: [Color(0xFF2A0F12),
+                Color(0xFF501C1F),
+                Color(0xF4000000)],
               begin: Alignment.bottomCenter,
               end: Alignment.bottomRight,
             ),
@@ -200,29 +156,30 @@ class _acceuilState extends State<acceuil> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => recommandePage(albums: albums)),
+                      builder: (_) => recommandePage(albums: albums),
+                    ),
                   );
                 },
               ),
               _buildFeaturedAlbumList(albums.sublist(1, 3)),
-
-// NOUVEAUTÉS
+              // NOUVEAUTÉS
               _buildSectionHeader(
                 'Nouveautés',
                 onVoirTout: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => nouveaute(albums: albums)),
+                      builder: (_) => nouveaute(albums: albums),
+                    ),
                   );
                 },
               ),
               _buildHorizontalAlbumList(albums),
 
-// VOS PLAYLISTS RECEMMENT ÉCOUTÉES -> LISTE DE MUSIQUES
-              _buildSectionHeader('Vos Musiques Récemment Écoutées'),
+              // VOS PLAYLISTS RECEMMENT ÉCOUTÉES -> LISTE DE MUSIQUES
+              _buildSectionHeader('Musiques Récemment Écoutées'),
               // pas de bouton
-              _buildRecentTracksList(recentTracks),
+              _buildRecentTracksScrollable(recentTracks),
               const SizedBox(height: 50),
             ],
           ),
@@ -262,7 +219,6 @@ class _acceuilState extends State<acceuil> {
     );
   }
 
-
   // --- Album Horizontal List (standard) ---
   Widget _buildHorizontalAlbumList(List<Map<String, String>> list) {
     return SizedBox(
@@ -276,7 +232,14 @@ class _acceuilState extends State<acceuil> {
             title: album['title']!,
             artist: album['artist']!,
             coverPath: album['cover'] ?? '',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) =>
+                    AlbumPage(
+                      album: album, title: '', artist: '', tracks: [],)),
+              );
+            },
             onDownload: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -305,7 +268,14 @@ class _acceuilState extends State<acceuil> {
             title: album['title']!,
             artist: album['artist']!,
             coverPath: album['cover'] ?? '',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) =>
+                    AlbumPage(
+                      album: album, title: '', artist: '', tracks: [],)),
+              );
+            },
             onDownload: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -321,120 +291,70 @@ class _acceuilState extends State<acceuil> {
     );
   }
 
-  Widget _buildRecentTracksList(List<Map<String, String>> list) {
-    return ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: list.length,
-      separatorBuilder: (context, index) =>
-      const Divider(color: Colors.white30),
-      itemBuilder: (context, index) {
-        final track = list[index];
-        return GestureDetector(
-          onTap: () {
-            moveTrackToTop(track);
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: MusicPlayerPage(track: track),
-              withNavBar: false,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
-          },
-
-
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                // --- Image ronde ---
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25), // cercle
-                  child: Image.asset(
-                    track['cover']!,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // --- Titre et artiste ---
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        track['title']!,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        track['artist']!,
-                        style: const TextStyle(
-                            color: Colors.white70, fontSize: 12),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                // --- Boutons play & download ---
-                Row(
-                  children: [
-                    // Play button
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.play_arrow,
-                            color: Colors.white, size: 20),
-                        onPressed: () {
-                          moveTrackToTop(track);
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: MusicPlayerPage(track: track),
-                            withNavBar: false,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          );
-                        },
-
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
-                      ),
+  Widget _buildRecentTracksScrollable(List<Map<String, String>> list) {
+    return Container(
+      height: 300, // tu peux ajuster la hauteur selon ton écran
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 100),
+        shrinkWrap: false,
+        physics: BouncingScrollPhysics(),
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final track = list[index];
+          return GestureDetector(
+            onTap: () {
+              moveTrackToTop(track);
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: MusicPlayerPage(track: track),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.slideUp,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      track['cover']!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(width: 8),
-                    // Download button
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.file_download_outlined,
-                            color: Colors.white, size: 20),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  'Téléchargement de ${track['title']} en cours...'),
-                            ),
-                          );
-                        },
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
-                      ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(track['title']!, style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text(track['artist']!, style: TextStyle(
+                            color: Colors.white70, fontSize: 12)),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF295A65),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                        Icons.file_download_outlined, color: Colors.white,
+                        size: 22),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
-
 }
 
 // --- WIDGETS ALBUM CARDS (inchangés) ---
@@ -475,30 +395,79 @@ class _AlbumCard extends StatelessWidget {
                     height: coverSize,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: coverSize,
-                        height: coverSize,
-                        color: Colors.grey.shade800,
-                      );
+                      return SizedBox(width: coverSize, height: coverSize);
                     },
                   ),
                 ),
                 Positioned(
-                  bottom: 5,
-                  right: 5,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 60,
+                  // hauteur du dégradé
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF8A1414), width: 3),
-                      color: Colors.black54,
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(8.0),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Color(0xA6000000), // couleur sombre
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 2,
+                  right: 5,
+                  child: Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF295A65),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
                       icon: const Icon(
                         Icons.file_download_outlined,
                         color: Colors.white,
-                        size: 30,
+                        size: 25,
                       ),
                       onPressed: onDownload,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: -2,
+                  left: -4,
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.video_library_outlined,
+                        color: Colors.white,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        // Ouvre la page de l'album
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AlbumPage(album: {
+                              'title': title,
+                              'artist': artist,
+                              'cover': coverPath,
+                            }, title: '', artist: '', tracks: [],),
+                          ),
+                        );
+                      },
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
@@ -564,39 +533,78 @@ class _FeaturedAlbumCard extends StatelessWidget {
                     width: coverSize,
                     height: coverSize,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: coverSize,
-                        height: coverSize,
-                        color: Colors.grey.shade800,
-                        child: const Center(
-                          child: Icon(
-                            Icons.music_note,
-                            color: Colors.white54,
-                            size: 40,
-                          ),
-                        ),
-                      );
-                    },
                   ),
                 ),
                 Positioned(
-                  bottom: 10,
-                  right: 10,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 60,
+                  // hauteur du dégradé
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF8A1414), width: 3),
-                      color: Colors.black54,
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(8.0),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Color(0xA6000000), // couleur sombre
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 3,
+                  right: 5,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF295A65),
                       shape: BoxShape.circle,
                     ),
+
                     child: IconButton(
                       icon: const Icon(
                         Icons.file_download_outlined,
                         color: Colors.white,
-                        size: 35,
+                        size: 30,
                       ),
                       onPressed: onDownload,
                       padding: const EdgeInsets.all(1),
+                      constraints: const BoxConstraints(),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 15,
+                  left: 6,
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.video_library_outlined,
+                        color: Color(0xFFFFFFFF),
+                        size: 47,
+                      ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AlbumPage(album: {
+                                'title': title,
+                                'artist': artist,
+                                'cover': coverPath,
+                              }, title: '', artist: '', tracks: [],),
+                            ),
+                          );
+                        },
+                      padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
                   ),

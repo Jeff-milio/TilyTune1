@@ -15,7 +15,11 @@ class MyApp extends StatelessWidget {
 
       title: "Tilytune",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+          useMaterial3: true),
       home: Page1()
     );
   }

@@ -73,6 +73,24 @@ flutter:
     - assets/images/izanohonamanay.jpg
     - assets/images/filoha remi.jpg
     - assets/images/guitaretily.jpg
+    - assets/icon/album.png
+    - assets/images/odd.tilytune.jpg
+    - assets/images/hira-sapaoritra/hirafiantsonamenafify.png
+    - assets/images/hira-sapaoritra/hirasapaoritramenafify.jpg
+    - assets/images/hira-sapaoritra/indretovonona.jpg
+    - assets/images/hira-sapaoritra/ho-tiavinay-mandrakizay.jpg
+    - assets/images/hira-sapaoritra/miaingamiainga-mena.jpg
+    - assets/images/hira-sapaoritra/manaparasakamapanazava.jpg
+    - assets/images/hira_fankalazana/75taonaafo.jpg
+    - assets/images/hira_fankalazana/80taonampanazava.jpg
+    - assets/images/hira_fankalazana/90taonaspmavo.jpg
+    - assets/images/hira_fankalazana/90taonaspmena.jpg
+    - assets/images/hira_fankalazana/100taonatily.jpg
+    - assets/images/hira_fankalazana/hiraampamoloana2023.jpg
+    - assets/images/hira_fankalazana/hiranydiniery2023.jpg
+    - assets/images/hira_fankalazana/hiranylomay2023.jpg
+    - assets/images/sareba/sareba.jpg
+    - assets/images/sareba/sarebatsapiky-fivondronana-amboasary-antsimo.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

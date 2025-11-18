@@ -80,8 +80,8 @@ class _Page1State extends State<Page1> {
   List<Widget> _buildScreens() {
     return [
       const acceuil(),
-      const liste(),
-      const moi(),
+      Liste(),
+      Moi(),
       const notice(),
       const parametre(),
     ];
