@@ -37,7 +37,7 @@ class _acceuilState extends State<acceuil> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 43,
+        toolbarHeight: 60,
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -336,16 +336,12 @@ class _acceuilState extends State<acceuil> {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 35,
                     width: 35,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF295A65),
-                      shape: BoxShape.circle,
-                    ),
                     child: Icon(
                         Icons.file_download_outlined, color: Colors.white,
-                        size: 22),
+                        size: 27),
                   ),
                 ],
               ),

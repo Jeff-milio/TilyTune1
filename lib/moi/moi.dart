@@ -59,8 +59,9 @@ class _MoiState extends State<Moi> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color(0xFF5C1616), // Rouge Bordeaux
-                      Colors.black,
+                      Color(0xFF40171A),
+                      Color(0xFF2A0F12), // Rouge Bordeaux
+                      Color(0xFF000000)
                     ],
                   ),
                 ),
@@ -189,7 +190,7 @@ class _MoiState extends State<Moi> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.add_circle, color: Color(0xFF2E8C95), size: 70),
+            Icon(Icons.add_box, color: Color(0xFF2E8C95), size: 70),
             // Icône plus grande
             SizedBox(
               width: 15,
@@ -197,8 +198,9 @@ class _MoiState extends State<Moi> {
 
             ),
             Text(
-              'Créer Mon Playlist',
+              'Mon Playlist',
               style: TextStyle(
+                fontFamily: 'Momotrust',
                 color: Colors.white,
                 fontSize: 22, // Texte plus grand
                 fontWeight: FontWeight.w900,
@@ -279,13 +281,9 @@ class _MoiState extends State<Moi> {
                   Container(
                     height: 35,
                     width: 35,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF295A65),
-                      shape: BoxShape.circle,
-                    ),
                     child: Icon(
                         Icons.file_download_outlined, color: Colors.white,
-                        size: 22),
+                        size: 25),
                   ),
                 ],
               ),
