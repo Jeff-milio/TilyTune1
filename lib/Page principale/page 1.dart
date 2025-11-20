@@ -83,7 +83,7 @@ class _Page1State extends State<Page1> {
       Liste(),
       Moi(),
       const notice(),
-      const parametre(),
+      const Parametre(),
     ];
   }
 

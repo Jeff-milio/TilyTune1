@@ -44,7 +44,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xFF551515),
+                    Color(0xFF40171A),
                     Color(0xFF230606),
                     Color(0xFF000000),
                     Colors.black
@@ -124,7 +124,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Color(0xFF531010),
+              color:  Color(0xFF40171A)
             ),
             child: Text(
               'Menu',
@@ -321,13 +321,13 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                     style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
-                  const Text('I\'m singing in the rain', style: TextStyle(color: Colors.white, fontSize: 20)),
-                  const Text('Just singing in the rain', style: TextStyle(color: Colors.white, fontSize: 20)),
+                  const Text('Nde Iainga vo maraina amakivaky lohasaha', style: TextStyle(color: Colors.white, fontSize: 20)),
+                  const Text('Tendrombohitra mideza tsy maintsy andehanana', style: TextStyle(color: Colors.white, fontSize: 20)),
                   const SizedBox(height: 20),
-                  const Text('What a glorious feeling', style: TextStyle(color: Colors.white70, fontSize: 18)),
-                  const Text('I\'m happy again', style: TextStyle(color: Colors.white70, fontSize: 18)),
+                  const Text('Ka raha sendrasendra ka raha sendra misy ny adrodroana', style: TextStyle(color: Colors.white70, fontSize: 18)),
+                  const Text('Tsy ampy iray minitra monja dia ho afaka', style: TextStyle(color: Colors.white70, fontSize: 18)),
                   const SizedBox(height: 20),
-                  const Text('The sun\'s in my heart', style: TextStyle(color: Colors.white70, fontSize: 18)),
+                  const Text('Ny combat aa anaty ala', style: TextStyle(color: Colors.white70, fontSize: 18)),
                   const SizedBox(height: 300),
                 ],
               ),

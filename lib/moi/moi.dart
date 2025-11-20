@@ -1,11 +1,15 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:tilytune1/moi/Favoris.dart';
 
 import '../data.dart';
 import '../musiquePlayerPage/musiqueplayerPage.dart';
+import 'Telechargement.dart';
+import 'monplaylist/monplaylist.dart';
 
 class Moi extends StatefulWidget {
   @override
@@ -19,13 +23,6 @@ class _MoiState extends State<Moi> {
       recentTracks.insert(0, track); // Ajoute à la première position
     });
   }
-
-  final List<Map<String, String>> recentlyPlayed = [
-    {'title': 'Night Drive', 'artist': 'Artist X', 'duration': '3:45'},
-    {'title': 'Rhythm of the Rain', 'artist': 'Singer Y', 'duration': '4:12'},
-    {'title': 'Electric Dreams', 'artist': 'Band Z', 'duration': '2:59'},
-    {'title': 'Acoustic Soul', 'artist': 'Solo Guy', 'duration': '5:01'},
-  ];
 
   XFile? _image;
 
@@ -44,136 +41,162 @@ class _MoiState extends State<Moi> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: CustomScrollView(
-        slivers: [
-          // 1. Header avec Dégradé et Infos de Profil
-          SliverAppBar(
-            expandedHeight: 180.0,
-            floating: false,
-            pinned: true,
-            backgroundColor: Colors.black,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF40171A),
-                      Color(0xFF2A0F12), // Rouge Bordeaux
-                      Color(0xFF000000)
-                    ],
-                  ),
-                ),
-                child: Padding(
-                    padding: const EdgeInsets.only(top: 40.0, left: 20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-
-                        // ---- PHOTO + STYLO ----
-                        SizedBox(
-                          width: 110,
-                          height: 110,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              // PHOTO
-                              GestureDetector(
-                                onTap: pickImage,
-                                child: CircleAvatar(
-                                  radius: 55,
-                                  backgroundImage:
-                                  _image != null
-                                      ? FileImage(File(_image!.path))
-                                      : null,
-                                  child: _image == null
-                                      ? const Icon(Icons.person, size: 45)
-                                      : null,
-                                ),
-                              ),
-
-                              // STYLO
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: GestureDetector(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF120505),
+                  Color(0xFF351215),
+                  Color(0xFF220C0F),
+                  Color(0xFF000000),
+                ],
+              ),
+            ),
+          ),
+          CustomScrollView(
+            slivers: [
+              // 1. Header avec Dégradé et Infos de Profil
+              SliverAppBar(
+                expandedHeight: 180.0,
+                floating: false,
+                pinned: true,
+                backgroundColor: Colors.black,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF40171A),
+                          Color(0xFF2A0F12), // Rouge Bordeaux
+                          Color(0xFF000000),
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 40.0, left: 20.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // ---- PHOTO + STYLO ----
+                          SizedBox(
+                            width: 110,
+                            height: 110,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                // PHOTO
+                                GestureDetector(
                                   onTap: pickImage,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(7),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF212121),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.edit,
-                                      size: 30,
-                                      color: Colors.white,
+                                  child: CircleAvatar(
+                                    backgroundColor: Color(0xB5FFFFFF),
+                                    radius: 55,
+                                    backgroundImage: _image != null
+                                        ? FileImage(File(_image!.path))
+                                        : null,
+                                    child: _image == null
+                                        ? const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                            color: Color(0xFF000000),
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                                // STYLO
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: pickImage,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(7),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFF212121),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.camera_alt_outlined,
+                                        size: 28,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // ---- NOM + USERNAME ----
+                          const SizedBox(width: 15),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'Nigara Manoa',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '@ManoaNigara',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-
-                        // ---- NOM + USERNAME ----
-                        const SizedBox(width: 15),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Nigara Manoa',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              '@ManoaNigara',
-                              style: TextStyle(
-                                  color: Colors.white70, fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                ),
-              ),
-            ),
-          ),
-
-          // 2. Options de navigation (Téléchargements, Favoris) et le GRAND Bouton Playlist
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildProfileOption(context, Icons.file_download_outlined,
-                          'Téléchargements', () {}),
-                      _buildProfileOption(
-                          context, Icons.favorite_border, 'Mes Favoris', () {
-
-                      }),
-                      SizedBox(height: 30),
-                      _buildGiantPlaylistButton(context),
-                      SizedBox(height: 30),
-                      _buildSectionHeader('Musiques Récemment Écoutées'),
-                      // pas de bouton
-                      _buildRecentTracksScrollable(recentTracks),
-                      const SizedBox(height: 100),
-                      // LE NOUVEAU GRAND BOUTON PLAYLIST
-
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // 2. Options de navigation (Téléchargements, Favoris) et le GRAND Bouton Playlist
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildtelechargement(
+                          context,
+                          Icons.file_download_outlined,
+                          'Téléchargements',
+                          () {},
+                        ),
+
+                        _buildfavoris(
+                          context,
+                          Icons.favorite_border,
+                          'Mes Favoris',
+                          () {},
+                        ),
+                        SizedBox(height: 5),
+                        _buildGiantPlaylistButton(context),
+                        SizedBox(height: 30),
+
+                        _buildSectionHeader('Musiques Récemment Écoutées'),
+                        // pas de bouton
+                        _buildRecentTracksScrollable(recentTracks),
+                        const SizedBox(height: 100),
+                        // LE NOUVEAU GRAND BOUTON PLAYLIST
+                      ],
+                    ),
+                  ),
+                ]),
+              ),
+            ],
           ),
         ],
       ),
@@ -183,31 +206,50 @@ class _MoiState extends State<Moi> {
   Widget _buildGiantPlaylistButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('Créer une nouvelle playlist');
+        // Naviguer vers une autre page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Monplaylist()),
+        );
       },
-      child: SizedBox(
-        height: 100, // Hauteur personnalisée pour le rendre grand
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(Icons.add_box, color: Color(0xFF2E8C95), size: 70),
-            // Icône plus grande
-            SizedBox(
-              width: 15,
-              height: 50,
-
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20), // coins arrondis
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          // flou glassmorphism
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2), // couleur semi-transparente
+              borderRadius: BorderRadius.circular(20),
             ),
-            Text(
-              'Mon Playlist',
-              style: TextStyle(
-                fontFamily: 'Momotrust',
-                color: Colors.white,
-                fontSize: 22, // Texte plus grand
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.5,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Transform.rotate(
+                  angle: 0.3,
+                  child: Image.asset(
+                    "assets/images/1763641957934.png",
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(width: 2),
+                Text(
+                  'Mon Playlist',
+                  style: TextStyle(
+                    fontFamily: 'Momotrust',
+                    color: Color(0xFFFFECCD),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -235,7 +277,7 @@ class _MoiState extends State<Moi> {
 
   Widget _buildRecentTracksScrollable(List<Map<String, String>> list) {
     return Container(
-      height: 300, // tu peux ajuster la hauteur selon ton écran
+      height: 300,
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 100),
         shrinkWrap: false,
@@ -243,7 +285,9 @@ class _MoiState extends State<Moi> {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final track = list[index];
+
           return GestureDetector(
+            behavior: HitTestBehavior.opaque, // 🔥 capture tout le row
             onTap: () {
               moveTrackToTop(track);
               PersistentNavBarNavigator.pushNewScreen(
@@ -267,24 +311,33 @@ class _MoiState extends State<Moi> {
                     ),
                   ),
                   const SizedBox(width: 16),
+
+                  // 🎵 TITRE + ARTISTE
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(track['title']!, style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(track['artist']!, style: TextStyle(
-                            color: Colors.white70, fontSize: 12)),
+                        Text(
+                          track['title']!,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          track['artist']!,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  Container(
-                    height: 35,
-                    width: 35,
-                    child: Icon(
-                        Icons.file_download_outlined, color: Colors.white,
-                        size: 25),
-                  ),
+
+                  // ⬇️ Icône téléchargement (ne bloque plus le clic)
+                  Icon(Icons.file_download_outlined,
+                      color: Colors.white, size: 27),
                 ],
               ),
             ),
@@ -295,15 +348,25 @@ class _MoiState extends State<Moi> {
   }
 
 
-  // Widget pour les options de profil classiques
-  Widget _buildProfileOption(BuildContext context, IconData icon, String title,
-      VoidCallback onTap) {
+  // Widget pour les telechargement
+  Widget _buildtelechargement(
+    BuildContext context,
+    IconData icon,
+    String title,
+    VoidCallback onTap,
+  ) {
     return Card(
       color: Colors.grey[900],
       margin: EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          // Naviguer vers une autre page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Telechargement()),
+          );
+        },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
@@ -324,4 +387,44 @@ class _MoiState extends State<Moi> {
       ),
     );
   }
+}
+
+// option pour favoris
+Widget _buildfavoris(
+  BuildContext context,
+  IconData icon,
+  String title,
+  VoidCallback onTap,
+) {
+  return Card(
+    color: Colors.grey[900],
+    margin: EdgeInsets.only(bottom: 12),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: InkWell(
+      onTap: () {
+        // Naviguer vers une autre page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Favoris()),
+        );
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 28),
+            SizedBox(width: 20),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),
+          ],
+        ),
+      ),
+    ),
+  );
 }

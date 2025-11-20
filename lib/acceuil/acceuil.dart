@@ -293,7 +293,7 @@ class _acceuilState extends State<acceuil> {
 
   Widget _buildRecentTracksScrollable(List<Map<String, String>> list) {
     return Container(
-      height: 300, // tu peux ajuster la hauteur selon ton écran
+      height: 300,
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 100),
         shrinkWrap: false,
@@ -301,58 +301,84 @@ class _acceuilState extends State<acceuil> {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final track = list[index];
-          return GestureDetector(
-            onTap: () {
-              moveTrackToTop(track);
-              PersistentNavBarNavigator.pushNewScreen(
-                context,
-                screen: MusicPlayerPage(track: track),
-                withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.slideUp,
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      track['cover']!,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+
+          return StatefulBuilder(
+            builder: (context, setState) {
+              bool isPressed = false;
+
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: (_) => setState(() => isPressed = true),
+                onTapCancel: () => setState(() => isPressed = false),
+                onTapUp: (_) {
+                  setState(() => isPressed = false);
+
+                  moveTrackToTop(track);
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: MusicPlayerPage(track: track),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  );
+                },
+                child: AnimatedScale(
+                  duration: Duration(milliseconds: 120),
+                  scale: isPressed ? 0.95 : 1.0, // 🔥 Animation de clic
+                  child: Container(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    child: Row(
                       children: [
-                        Text(track['title']!, style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(track['artist']!, style: TextStyle(
-                            color: Colors.white70, fontSize: 12)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            track['cover']!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                track['title']!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                track['artist']!,
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Icon(
+                          Icons.file_download_outlined,
+                          color: Colors.white,
+                          size: 27,
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: Icon(
-                        Icons.file_download_outlined, color: Colors.white,
-                        size: 27),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         },
       ),
     );
   }
 }
-
 // --- WIDGETS ALBUM CARDS (inchangés) ---
 class _AlbumCard extends StatelessWidget {
   final String title;
