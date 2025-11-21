@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'CRUD/Crud_Users/signup_page.dart';
 import 'Page principale/page 1.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white),
           ),
           useMaterial3: true),
-      home: Page1()
+      home: SignupPage(),
     );
   }
 }

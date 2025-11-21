@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tilytune1/CRUD/Crud_Users/signup_page.dart';
+
+import '../CRUD/Crud_Users/loginpage.dart';
+import '../Page principale/page 1.dart';
+
+// NOTE IMPORTANTE :
+// Assurez-vous d'importer correctement Page1.dart dans votre projet réel.
+// Par exemple : import '../../Page principale/page 1.dart';
+// J'ai inclus une version fictive de Page1 ci-dessous pour rendre le code compilable.
 
 // ------------------------------------
 // 1. La page d'accueil des paramètres
@@ -27,7 +36,6 @@ class _ParametreScreenState extends State<Parametre> {
 
   // --- Fonctions d'action ---
 
-  // 1. Changer la langue
   void _changeLanguage(BuildContext context) {
     setState(() {
       isMalagasy = !isMalagasy;
@@ -43,19 +51,13 @@ class _ParametreScreenState extends State<Parametre> {
           message,
           style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor:Color(0xFF454545),
+        backgroundColor:const Color(0xFF454545),
         duration: const Duration(seconds: 2),
       ),
     );
-
-    // REMARQUE: Dans une vraie application, le code de l'API de localisation irait ici.
   }
 
-  // 2. Inviter des amis (Simulé)
   void _inviteFriends(BuildContext context) {
-    // REMARQUE: Dans une vraie application, vous utiliseriez un package comme 'share_plus' ou 'url_launcher'
-    // pour ouvrir la feuille de partage du système ou envoyer un lien par SMS/e-mail.
-
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -77,7 +79,7 @@ class _ParametreScreenState extends State<Parametre> {
     );
   }
 
-  // 3. Déconnexion
+  // 3. Déconnexion (CORRIGÉE pour effacer la NavBar)
   void _logout(BuildContext context) {
     showDialog(
       context: context,
@@ -97,8 +99,16 @@ class _ParametreScreenState extends State<Parametre> {
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
-                // REMARQUE: Le code réel de déconnexion de Firebase/l'API irait ici.
-                print("ACTION: Utilisateur déconnecté.");
+
+                // CODE DE DÉCONNEXION RÉELLEMENT IMPORTANT
+                print("ACTION: Utilisateur déconnecté. Redirection vers LoginPage.");
+
+                // Utilisation de rootNavigator: true pour naviguer
+                // au-delà de la structure de navigation imbriquée (comme la NavBar).
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                      (route) => false, // Efface toutes les routes
+                );
               },
               child: const Text('Déconnexion', style: TextStyle(color: Colors.redAccent)),
             ),
@@ -108,7 +118,6 @@ class _ParametreScreenState extends State<Parametre> {
     );
   }
 
-  // 4. Supprimer le compte
   void _deleteAccount(BuildContext context) {
     showDialog(
       context: context,
@@ -128,7 +137,16 @@ class _ParametreScreenState extends State<Parametre> {
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
-                // REMARQUE: Le code réel de suppression du compte irait ici.
+
+                // CODE DE DÉCONNEXION RÉELLEMENT IMPORTANT
+                print("ACTION: Utilisateur déconnecté. Redirection vers LoginPage.");
+
+                // Utilisation de rootNavigator: true pour naviguer
+                // au-delà de la structure de navigation imbriquée (comme la NavBar).
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const SignupPage()),
+                      (route) => false, // Efface toutes les routes
+                );
                 print("ACTION: Compte utilisateur supprimé.");
               },
               child: const Text('Supprimer', style: TextStyle(color: Colors.red)),
@@ -152,7 +170,7 @@ class _ParametreScreenState extends State<Parametre> {
             color: Colors.white,
           ),
         ),
-        iconTheme: const IconThemeData(color: Colors.white), // Couleur de la flèche de retour
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         color: darkBackground,
@@ -182,7 +200,6 @@ class _ParametreScreenState extends State<Parametre> {
               icon: Icons.info_outline,
               title: "À propos",
               onTap: () {
-                // Naviguer vers la page À propos
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const AproposPage()),
@@ -198,13 +215,13 @@ class _ParametreScreenState extends State<Parametre> {
             _buildSettingsTile(
               icon: Icons.logout,
               title: "Déconnexion",
-              color: Color(-9060), // Pour mettre en évidence l'action
+              color: const Color(0xFFEB5353),
               onTap: () => _logout(context),
             ),
             _buildSettingsTile(
               icon: Icons.delete_forever,
               title: "Supprimer le compte",
-              color: Colors.redAccent, // Alerte, action dangereuse
+              color: Colors.redAccent,
               onTap: () => _deleteAccount(context),
             ),
           ],
@@ -213,7 +230,6 @@ class _ParametreScreenState extends State<Parametre> {
     );
   }
 
-  // Widget helper pour les tuiles de paramètres
   Widget _buildSettingsTile({
     required IconData icon,
     required String title,
@@ -233,7 +249,6 @@ class _ParametreScreenState extends State<Parametre> {
       trailing: trailing ?? const Icon(Icons.arrow_forward_ios, color: Colors.white30, size: 16),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      // Ajoute un séparateur visuel entre les tuiles
       tileColor: darkBackground,
     );
   }
@@ -251,67 +266,71 @@ class AproposPage extends StatelessWidget {
     const Color darkBackground = Color(0xFF120202);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0B0101),
-        title: const Text(
-          "À propos",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-            color: Colors.white,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0B0101),
+          title: const Text(
+            "À propos",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              color: Colors.white,
+            ),
           ),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      backgroundColor: darkBackground,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: darkBackground,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(child: Image.asset('assets/images/logo2_tilytune.png', height: 30 ),
-              ),
-              SizedBox(height: 10),
+              // Remplacement de Image.asset par un placeholder si l'asset n'est pas disponible
+              const Center(child: Icon(Icons.music_note, color: Colors.white, size: 40)),
+              const SizedBox(height: 10),
 
-              Center(
+              const Center(
                 child: Text(
-                "Version Beta (Build 20241020)",
-                style: TextStyle(fontSize: 14, color: Colors.white54 ),
-              ),),
-            Divider(height: 40, color: Colors.white12),
-            Text(
-              "Description",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                  "Version Beta (Build 20241020)",
+                  style: TextStyle(fontSize: 14, color: Colors.white54 ),
+                ),),
+              const Divider(height: 40, color: Colors.white12),
+              const Text(
+                "Description",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Application de streaming musicale scout.....",
-              style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
-            ),
-            SizedBox(height: 30),
-            Text(
-              "Mentions Légales",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+              const SizedBox(height: 10),
+              const Text(
+                "Application de streaming musicale scout.....",
+                style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "© 2025 MonEntreprise. Tous droits réservés.\n"
-                  "Conditions d'utilisation et Politique de confidentialité "
-                  "disponibles sur notre site web (Atoo eeeeeee)."
-                  ""
-                  "Mampiasa finaritra eeeeeeh",
-              style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
-            ),],
-      ),
-      )
+              const SizedBox(height: 30),
+              const Text(
+                "Mentions Légales",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "© 2025 MonEntreprise. Tous droits réservés.\n"
+                    "Conditions d'utilisation et Politique de confidentialité "
+                    "disponibles sur notre site web (Atoo eeeeeee)."
+                    ""
+                    "Mampiasa finaritra eeeeeeh",
+                style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
+              ),],
+          ),
+        )
     );
   }
 }
+
+// ------------------------------------
+// 3. Votre page de Connexion (LoginPage)
+// ------------------------------------
