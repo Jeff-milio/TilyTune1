@@ -42,14 +42,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     _setupPlayer();
   }
 
-// Dans _MusicPlayerPageState
-
-// Dans _MusicPlayerPageState
-
-// DANS MusicPlayerPage.dart
-
-  // DANS MusicPlayerPage.dart
-
   Future<void> _setupPlayer() async {
     try {
       final oldTrack = AudioService.currentTrackNotifier.value;
@@ -93,6 +85,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   Widget build(BuildContext context) {
     const Color cardColor = Color(0xFF2E2E33);
     const Color skipColor = Color(0xFFEEEEEE);
+
 
     return GestureDetector(
       onVerticalDragEnd: (details) {

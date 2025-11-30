@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../AlbumPage/albumpage.dart';
 import '../data.dart';
 
